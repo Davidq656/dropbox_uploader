@@ -188,47 +188,54 @@ else
     PRINTF_OPT=""
 fi
 
+function custom_file_location
+{
+    local SRC="$(basename "$")"
+    local DST
+
+    case $SRC in
+     
+    Modding-Forum-com*)
+    $DST=/Backups/www-modding-forum-com/
+    ;;
+
+    tracking-qso4you-services*)
+    $DST=/Backups/tracking-qso4you-services/
+    ;;
+
+    URL-QSO4YOU-COM*)
+    $DST=/Backups/url-qso4you-com/
+    ;;
+
+    qso4you-com*)
+    $DST=/Backups/www-qso4you-com/
+    ;;
+
+    cloud-extranet-qso4you-services*)
+    $DST=/Backups/cloud-extranet-qso4you-services/
+    ;;
+
+    email-qso4you-services*)
+    $DST=/Backups/email-qso4you-services/
+    ;;
+
+    QSO4YOU-Services*)
+    $DST=/Backups/qso4you-services/
+    ;;
+
+    esac
+    
+    echo $DST
+}
 
 
 function encrypt_data
 {
     if [[ $ENCRYPT_DATA == 1 ]]; then
 
-	echo -e "\n\033[33mDaten werden mittels OPENSSL verschlüsselt\n\033[m"
+	echo -e "\n\033[33mData will be encrypted using OPENSSL\n\033[m"
 
-	openssl enc -aes-256-cbc -salt -pass env:CURRENT_PW -in ${SRC} -out ${$DST}
-
-        case $SRC in
-	
-	Modding-Forum-com*)
-	$DST=/Backups/www-modding-forum-com/
-	;;
-
-        tracking-qso4you-services*)
-        $DST=/Backups/tracking-qso4you-services/
-	;;
-
-	URL-QSO4YOU-COM*)
-	$DST=/Backups/url-qso4you-com/
-	;;
-
-	qso4you-com*)
-	$DST=/Backups/www-qso4you-com/
-	;;
-
-	cloud-extranet-qso4you-services*)
-	$DST=/Backups/cloud-extranet-qso4you-services/
-	;;
-
-	email-qso4you-services*)
-	$DST=/Backups/email-qso4you-services/
-	;;
-
-	QSO4YOU-Services*)
-	$DST=/Backups/qso4you-services/
-	;;
-
-	esac
+	openssl enc -aes-256-cbc -salt -pass env:CURRENT_PW -in ${SRC} na-out ${$DST}
 
     fi
 }
@@ -486,8 +493,8 @@ function urlencode
 #$2 = Remote destination file/dir
 function db_upload
 {
-    local SRC=$(normalize_path "$1")
-    local DST=$(normalize_path "$2")
+    local SRC
+    local DST
 
     for j in "${EXCLUDE[@]}"
         do :
@@ -636,8 +643,8 @@ function db_simple_upload_file
 #$2 = Remote destination file
 function db_chunked_upload_file
 {
-    local FILE_SRC=$(normalize_path "$1")
-    local FILE_DST=$(normalize_path "$2")
+    local FILE_SRC
+    local FILE_DST
 
 
     if [[ $SHOW_PROGRESSBAR == 1 && $QUIET == 0 ]]; then

@@ -188,16 +188,20 @@ else
     PRINTF_OPT=""
 fi
 
-
+    
 
 function encrypt_data
 {
-    if [ $ENCRYPT_DATA ==1 ]; then
+    if [[ $ENCRYPT_DATA == 1 ]]; then
+	echo -e "\n\033[33mData will be encrypted using OPENSSL\n\033[m"
+        openssl enc -aes-256-cbc -salt -pass env:CURRENT_PW -in ${SRC} -out ${DST}
+    fi
+}
 
-	echo -e "\n\033[33mDaten werden mittels OPENSSL verschlüsselt\n\033[m"
-
-        case $SRC in
-	
+function current_file_location
+{
+	case $SRC in
+    
 	Modding-Forum-com*)
 	$DST=/Backups/www-modding-forum-com/
 	;;
@@ -227,8 +231,6 @@ function encrypt_data
 	;;
 
 	esac
-
-    fi
 }
 
 #Print the message based on $QUIET variable
